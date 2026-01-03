@@ -9,11 +9,46 @@ import { Send, CheckCircle2 } from "lucide-react"
 
 export function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSending, setIsSending] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setIsSubmitted(true)
-    setTimeout(() => setIsSubmitted(false), 3000)
+    setIsSending(true)
+    setErrorMessage("")
+
+    const form = new FormData(event.currentTarget)
+    const name = form.get("name")
+    const business = form.get("business")
+    const city = form.get("city")
+    const contact = form.get("contact")
+    const message = form.get("message")
+
+    const payload = {
+      name: String(name || ""),
+      email: String(contact || ""),
+      message: `Business: ${business || "N/A"}\nCity: ${city || "N/A"}\nContact: ${contact || "N/A"}\n\n${message || ""}`,
+    }
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error("Request failed")
+      }
+
+      setIsSubmitted(true)
+      event.currentTarget.reset()
+      setTimeout(() => setIsSubmitted(false), 3000)
+    } catch (error) {
+      setErrorMessage("Something went wrong. Please try again.")
+    } finally {
+      setIsSending(false)
+    }
   }
 
   return (
@@ -50,6 +85,7 @@ export function ContactForm() {
                   </Label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="John Smith"
                     required
                     className="h-10 sm:h-11"
@@ -61,6 +97,7 @@ export function ContactForm() {
                   </Label>
                   <Input
                     id="business"
+                    name="business"
                     placeholder="Smith's Restaurant"
                     required
                     className="h-10 sm:h-11"
@@ -75,6 +112,7 @@ export function ContactForm() {
                   </Label>
                   <Input
                     id="city"
+                    name="city"
                     placeholder="Los Angeles"
                     required
                     className="h-10 sm:h-11"
@@ -86,6 +124,7 @@ export function ContactForm() {
                   </Label>
                   <Input
                     id="contact"
+                    name="contact"
                     placeholder="(555) 123-4567"
                     required
                     className="h-10 sm:h-11"
@@ -99,18 +138,24 @@ export function ContactForm() {
                 </Label>
                 <Textarea
                   id="message"
+                  name="message"
                   placeholder="What are your goals?"
                   rows={3}
                   className="resize-none"
                 />
               </div>
 
+              {errorMessage ? (
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              ) : null}
+
               <Button
                 type="submit"
                 size="lg"
                 className="w-full text-sm sm:text-base py-5 sm:py-6"
+                disabled={isSending}
               >
-                Get My Free Quote
+                {isSending ? "Sending..." : "Get My Free Quote"}
                 <Send className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </form>
