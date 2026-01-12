@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: 'Modern Websites for Local Businesses | Get More Customers',
+  title: 'PixelAlch Studio | Modern Websites for Local Businesses',
   description:
-    'We help local businesses get more customers with fast, mobile-friendly websites. Get a free website audit today.',
+    'PixelAlch Studio helps local businesses get more customers with fast, mobile-friendly websites and conversion-focused design.',
   generator: 'v0.app',
   icons: {
     icon: [
