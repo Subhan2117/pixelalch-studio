@@ -22,11 +22,16 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-background/60 text-sm">
                 <Mail className="w-4 h-4" />
-                hello@webcraft.com
+                <a
+                  href="mailto:hello@pixelalch.com"
+                  className="hover:text-background transition-colors"
+                >
+                  hello@pixelalch.com
+                </a>
               </li>
               <li className="flex items-center gap-3 text-background/60 text-sm">
                 <Phone className="w-4 h-4" />
-                (555) 123-4567
+                9342342372
               </li>
               <li className="flex items-center gap-3 text-background/60 text-sm">
                 <MapPin className="w-4 h-4" />
